@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import { GlobalContext } from '../context/GlobalState';
 import { getData } from './DataService';
 
+import iconArrow from '../assets/icon-arrow.svg';
+
 const SearchFormWrapper = styled.form`
   height: 50px;
   width: 500px;
@@ -112,7 +114,7 @@ const SearchForm = () => {
         onChange={e => setValue(e.target.value)}
       />
       <ButtonWrapper>
-        <img src="/images/icon-arrow.svg" alt="icon-arrow" />
+        <img src={iconArrow} alt="icon-arrow" />
       </ButtonWrapper>
     </SearchFormWrapper>
   );

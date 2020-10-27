@@ -36,6 +36,7 @@ const BoardData = () => {
       loadData(defaultData);
     };
     getDefaultData();
+    // eslint-disable-next-line
   }, []);
 
   const renderContent = content => (content ? content : 'loading...');

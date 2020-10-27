@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import SearchForm from './SearchForm';
 import BoardData from './BoardData';
 
+import headerBg from '../assets/pattern-bg.png';
+
 const HeaderWrapper = styled.header`
-  background-image: url('/images/pattern-bg.png');
+  background-image: url(${headerBg});
   padding: 20px 0;
   display: flex;
   justify-content: center;
