@@ -1,11 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchData } from '../../actions/actions';
 
-import { GlobalContext } from '../context/GlobalState';
-import { getData } from './DataService';
-
-import iconArrow from '../assets/icon-arrow.svg';
+import iconArrow from '../../assets/icon-arrow.svg';
 
 const SearchFormWrapper = styled.form`
   height: 50px;
@@ -23,13 +22,13 @@ const SearchFormWrapper = styled.form`
 
 const Input = styled.input`
   padding: 10px 20px;
-  border: none;
   border-radius: 10px 0 0 10px;
   font-size: 18px;
   font-family: inherit;
   width: 100%;
   height: 100%;
   position: relative;
+  border: none;
 
   &:focus {
     outline: none;
@@ -58,60 +57,32 @@ const ButtonWrapper = styled.button`
   }
 `;
 
-const domainRegex = new RegExp(
-  '^(https?://)?([da-z.-]+).([a-z.]{2,6})([/w .-]*)*/?$'
-);
-
-const ipRegex = new RegExp(
-  '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
-);
-
 const SearchForm = () => {
-  const { loadData } = useContext(GlobalContext);
+  const dispatch = useDispatch();
 
-  const [value, setValue] = useState('');
+  const searchData = useSelector(state => state.searchData);
+  const { error } = searchData;
 
-  const getNewData = async () => {
-    let newData;
+  const [address, setAddress] = useState('');
 
-    if (value.match(ipRegex)) {
-      newData = await getData(value);
-    } else {
-      newData = await getData(null, value);
+  useEffect(() => {
+    if (error) {
+      toast(error, toast.TYPE.ERROR);
     }
-
-    if (!newData) {
-      // alert('Not found data!');
-      toast.error(
-        `Not found!
-        Try with wwww.domain.com
-        `
-      );
-      return;
-    }
-
-    loadData(newData);
-  };
+  }, [error]);
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (value.match(ipRegex) || value.match(domainRegex)) {
-      getNewData();
-    } else {
-      toast.error(
-        `Not found!
-        Try with wwww.domain.com
-        `
-      );
-    }
+
+    dispatch(fetchData(address));
   };
 
   return (
     <SearchFormWrapper onSubmit={handleSubmit}>
       <Input
         placeholder="Search for any IP address or domain"
-        value={value}
-        onChange={e => setValue(e.target.value)}
+        value={address}
+        onChange={e => setAddress(e.target.value)}
       />
       <ButtonWrapper>
         <img src={iconArrow} alt="icon-arrow" />

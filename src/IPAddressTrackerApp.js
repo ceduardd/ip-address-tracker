@@ -1,11 +1,11 @@
 import React from 'react';
 import { createGlobalStyle } from 'styled-components';
 import { ToastContainer } from 'react-toastify';
+import { Provider } from 'react-redux';
+import store from './store';
+import HomeScreen from './screens/HomeScreen';
 
-import Header from '../components/Header';
-import MapView from '../components/MapView';
-
-import { GlobalProvider } from '../context/GlobalState';
+import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const GlobalStyle = createGlobalStyle`
@@ -30,14 +30,11 @@ const GlobalStyle = createGlobalStyle`
 
 const App = () => {
   return (
-    <>
-      <GlobalProvider>
-        <GlobalStyle />
-        <ToastContainer />
-        <Header />
-        <MapView />
-      </GlobalProvider>
-    </>
+    <Provider store={store}>
+      <GlobalStyle />
+      <HomeScreen />
+      <ToastContainer />
+    </Provider>
   );
 };
 
